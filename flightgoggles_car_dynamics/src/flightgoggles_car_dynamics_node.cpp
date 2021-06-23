@@ -133,8 +133,10 @@ node_(nh)
   frameRateSub_ = node_.subscribe("/uav/camera/debug/fps", 1, &Car_Dynamics::fpsCallback, this);
 
   if (useSimTime_) {
+    std_msgs::Time time;
+    time.data = currentTime_;
     clockPub_ = node_.advertise<rosgraph_msgs::Clock>("/clock",1);
-    clockPub_.publish(currentTime_);
+    clockPub_.publish(time);
   } else {
     // Get the current time if we are using wall time. Otherwise, use 0 as initial clock.
     currentTime_ = ros::Time::now();
@@ -161,7 +163,9 @@ void Car_Dynamics::simulationLoopTimerCallback(const ros::WallTimerEvent& event)
   // Step the time forward
   if (useSimTime_){
     currentTime_ += ros::Duration(dt_secs);
-    clockPub_.publish(currentTime_);
+    std_msgs::Time time;
+    time.data = currentTime_;
+    clockPub_.publish(time);
   } else {
       ros::Time loopStartTime = ros::Time::now();
       dt_secs = (loopStartTime - currentTime_).toSec();

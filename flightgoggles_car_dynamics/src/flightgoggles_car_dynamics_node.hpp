@@ -28,6 +28,8 @@
 #include <sstream>
 #include <random>
 
+#include <std_msgs/Time.h>
+
 /**
  * @brief Car Dynamics class used for dynamics simulation node
  * 
